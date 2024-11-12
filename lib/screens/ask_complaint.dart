@@ -1,11 +1,12 @@
-import 'package:complaint_app/widget/complaint_history_modal.dart';
+import 'package:complaint_app/widget/side_menu_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:complaint_app/widget/complaint_history_modal.dart';
 import 'package:complaint_app/screens/image_screen.dart';
 import 'package:complaint_app/screens/text_complaint_screen.dart';
 import 'package:complaint_app/screens/voice_screen.dart';
 import 'package:complaint_app/utils/color_theme.dart';
 import 'package:complaint_app/utils/text_theme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class AskComplaint extends StatefulWidget {
   const AskComplaint({super.key});
@@ -30,7 +31,24 @@ class _AskComplaintState extends State<AskComplaint> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        drawer: CustomDrawer(), // Add the drawer here
         backgroundColor: MyColorTheme.bgColor,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu, color: Colors.white),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.history, color: Colors.white),
+              onPressed: () => _showHistoryModal(context),
+            ),
+          ],
+        ),
         body: Stack(
           children: [
             _buildCurvedBackground(),
@@ -44,16 +62,6 @@ class _AskComplaintState extends State<AskComplaint> {
                     _buildComplaintOptions(),
                   ],
                 ),
-              ),
-            ),
-            // History button
-            Positioned(
-              top: 20,
-              left: 20,
-              child: FloatingActionButton(
-                backgroundColor: MyColorTheme.bgColor,
-                onPressed: () => _showHistoryModal(context), // Fixed here
-                child: const Icon(Icons.history, color: Colors.white),
               ),
             ),
           ],
@@ -265,3 +273,4 @@ class CustomWaveClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => true;
 }
+
